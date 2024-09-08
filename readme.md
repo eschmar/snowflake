@@ -3,6 +3,10 @@ Package snowflake provides a Twitter Snowflake unique id generator with a base 5
 
 See the [documentation in `snowflake.go`](https://github.com/eschmar/snowflake/blob/master/snowflake.go) for details.
 
+```sh
+go get -u github.com/eschmar/snowflake
+```
+
 **Notes**:
 - Only uses easily readable characters for humans.
 - Encoded id length is at most 11 chars (`log(54,9223372036854775807)<11`).
