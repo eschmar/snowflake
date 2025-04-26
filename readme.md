@@ -4,7 +4,7 @@ Package snowflake provides a Twitter Snowflake unique id generator with a base 5
 See the [documentation in `snowflake.go`](https://github.com/eschmar/snowflake/blob/master/snowflake.go) for details.
 
 ```sh
-go get -u github.com/eschmar/snowflake
+go get -u github.com/eschmar/snowflake@v0.1.0
 ```
 
 **Notes**:
