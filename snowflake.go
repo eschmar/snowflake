@@ -27,7 +27,7 @@
 //   - Intended usage is int64 internally, base encoding user facing.
 //   - IDs are roughly sortable, but timestamps are not deducible without effort
 //     since a scrambled alphabet is used for encoding.
-//   - Base 54 only uses characters easily readable for humans.
+//   - Base 54 only uses easily readable characters for humans.
 //   - Encoded length is at most 11 chars (log(54,9223372036854775807)<11).
 //   - Machine ID uses 3 bits for the continent, 6 bits for machine enumeration.
 //     That means at most 64 machines per continent.
@@ -99,7 +99,10 @@ func init() {
 // machine id in parallel, then the uniqueness of any
 // snowflake ID can _NOT_ be guaranteed.
 func SetMachineId(region string, index int64) {
-	continent := getContinentCode(region)
+	mutex.Lock()
+	defer mutex.Unlock()
+
+	continent := GetContinentCode(region)
 	maxMachineNumber := int64(math.Pow(2, float64(bitsMachineID-3)))
 
 	if continent < 0 || index < 0 || index >= maxMachineNumber {
@@ -109,8 +112,24 @@ func SetMachineId(region string, index int64) {
 	machineId = ((continent & 0b111) << (bitsMachineID - 3)) | (index & (maxMachineNumber - 1))
 }
 
+// Resets unique machine id to be invalid. Requres @SetMachineId again.
+func ResetMachineId() {
+	mutex.Lock()
+	machineId = -1
+	mutex.Unlock()
+}
+
+// Returns the unique machine id for snowflake generation.
+func GetMachineId() int64 {
+	return machineId
+}
+
 // Generates a unique snowflake id.
 func Generate() ID {
+	if machineId < 0 {
+		return Invalid
+	}
+
 	mutex.Lock()
 	defer mutex.Unlock()
 

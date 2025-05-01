@@ -20,7 +20,7 @@ var continents = [][]string{
 	{"syd"},
 }
 
-func getContinentCode(region string) int64 {
+func GetContinentCode(region string) int64 {
 	for i := 0; i < len(continents); i++ {
 		for j := range continents[i] {
 			if continents[i][j] == region {
