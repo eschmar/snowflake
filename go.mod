@@ -1,4 +1,3 @@
-// Deprecated: moved to github.com/phasesoftware/snowflake
-module github.com/eschmar/snowflake
+module github.com/phasesoftware/snowflake
 
 go 1.22.0
