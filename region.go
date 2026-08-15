@@ -1,5 +1,7 @@
 package snowflake
 
+import "slices"
+
 // Continents, from largest to smallest.
 // Region codes are sourced from multiple cloud providers:
 //   - Fly.io:    https://fly.io/docs/reference/regions/
@@ -59,11 +61,9 @@ var continents = [][]string{
 }
 
 func GetContinentCode(region string) int64 {
-	for i := 0; i < len(continents); i++ {
-		for j := range continents[i] {
-			if continents[i][j] == region {
-				return int64(i)
-			}
+	for i := range continents {
+		if slices.Contains(continents[i], region) {
+			return int64(i)
 		}
 	}
 
