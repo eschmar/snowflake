@@ -79,6 +79,21 @@ func TestGenerateExceedSequence(t *testing.T) {
 	wg.Wait()
 }
 
+func TestMachineIdRace(t *testing.T) {
+	SetMachineId("eu-west-1", 1)
+	done := make(chan struct{})
+	go func() {
+		for i := 0; i < 1000; i++ {
+			Generate()
+		}
+		close(done)
+	}()
+	for i := 0; i < 1000; i++ {
+		SetMachineId("eu-west-1", 2)
+	}
+	<-done
+}
+
 // 244.0 ns/op
 func BenchmarkGenerate(b *testing.B) {
 	for i := 0; i < b.N; i++ {

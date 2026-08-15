@@ -121,17 +121,20 @@ func ResetMachineId() {
 
 // Returns the unique machine id for snowflake generation.
 func GetMachineId() int64 {
+	mutex.Lock()
+	defer mutex.Unlock()
+
 	return machineId
 }
 
 // Generates a unique snowflake id.
 func Generate() ID {
+	mutex.Lock()
+	defer mutex.Unlock()
+
 	if machineId < 0 {
 		return Invalid
 	}
-
-	mutex.Lock()
-	defer mutex.Unlock()
 
 	now := time.Since(epoch).Milliseconds()
 
